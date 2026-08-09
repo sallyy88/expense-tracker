@@ -25,7 +25,8 @@ while True:
     print("2. View expenses")
     print("3. Filter by category")
     print("4. Delete expense")
-    print("5. Quit")
+    print("5. Edit expense")
+    print("6. Quit")
     choice = input("Choose an option: ")
     
     if choice == "1":
@@ -100,8 +101,23 @@ while True:
         
         connection.commit()
 
-        
     elif choice == "5":
+        cursor.execute("SELECT * FROM expenses")
+        results = cursor.fetchall()
+        
+        for row in results:
+            print(row[0], row[2], row[1])  # id, category, amount
+        
+        edit_id = int(input("Enter the id of the expense to edit: "))
+        
+        new_amount = float(input("Enter new amount: "))
+        new_category = input("Enter new category: ")
+        new_date = input("Enter new date: ")
+        
+        cursor.execute("UPDATE expenses SET amount = ?, category = ?, date = ? WHERE id = ?", (new_amount, new_category, new_date, edit_id))
+        connection.commit()
+        
+    elif choice == "6":
         break
 
     else:
